@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - HappyTummy</title>
+    <link rel="stylesheet" href="../static/css/myAccount.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="logo-text">
+                    <span class="logo-colored">Happy</span><span class="logo-bold">Tummy</span>
+                </span>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="window.location.href='restaurants.html'">Restaurants</button>
+                <button class="nav-btn" onclick="window.location.href='menu.html'">Menu</button>
+                <button class="nav-btn" onclick="window.location.href='cart.html'">Cart</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="account-container">
+        <h1 class="page-title">My Account</h1>
+
+        <!-- User Profile Section -->
+        <div class="profile-card">
+            <div class="profile-picture">
+                <img src="https://www.gravatar.com/avatar/?d=mp&s=100" alt="Profile Picture">
+            </div>
+            <div class="profile-info">
+                <h2>Sneha Maria</h2>
+                <p><strong>Email:</strong> sneha@email.com</p>
+                <p><strong>Phone:</strong> +91 9876543210</p>
+                <button class="edit-btn">Edit Profile</button>
+            </div>
+        </div>
+
+        <!-- Saved Addresses Section -->
+        <div class="addresses-section">
+            <h2>Saved Addresses</h2>
+            <div class="addresses-grid">
+                <div class="address-card">
+                    <h3>Home</h3>
+                    <p>123 Main St, City, State 12345</p>
+                    <p><strong>Phone:</strong> +91 9876543210</p>
+                    <button class="edit-btn">Edit</button>
+                </div>
+                <div class="address-card">
+                    <h3>Hostel</h3>
+                    <p>456 College Rd, University Town, State 67890</p>
+                    <p><strong>Phone:</strong> +91 9876543210</p>
+                    <button class="edit-btn">Edit</button>
+                </div>
+                <div class="address-card">
+                    <h3>Work</h3>
+                    <p>789 Office Blvd, Business District, State 54321</p>
+                    <p><strong>Phone:</strong> +91 9876543210</p>
+                    <button class="edit-btn">Edit</button>
+                </div>
+            </div>
+            <button class="add-address-btn">Add New Address</button>
+        </div>
+
+        <!-- Order History Section -->
+        <div class="order-history">
+            <h2>Order History</h2>
+            <div class="order-items">
+                <div class="order-item">
+                    <div class="order-header">
+                        <span class="order-id">#HT1023</span>
+                        <span class="order-date">12 March 2026 – 7:45 PM</span>
+                    </div>
+                    <div class="order-details">
+                        <p><strong>Items:</strong> Pasta with chilli sauce, Rice with shrimps</p>
+                        <p><strong>Total:</strong> ₹740</p>
+                        <div class="rating-stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-item">
+                    <div class="order-header">
+                        <span class="order-id">#HT1024</span>
+                        <span class="order-date">10 March 2026 – 6:30 PM</span>
+                    </div>
+                    <div class="order-details">
+                        <p><strong>Items:</strong> Chicken burger combo, French fries</p>
+                        <p><strong>Total:</strong> ₹650</p>
+                        <div class="rating-stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-item">
+                    <div class="order-header">
+                        <span class="order-id">#HT1025</span>
+                        <span class="order-date">8 March 2026 – 8:15 PM</span>
+                    </div>
+                    <div class="order-details">
+                        <p><strong>Items:</strong> Margherita Pizza, Coke</p>
+                        <p><strong>Total:</strong> ₹580</p>
+                        <div class="rating-stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../static/js/myAccount.js"></script>
+</body>
+</html>
