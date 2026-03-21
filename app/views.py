@@ -1,6 +1,106 @@
+from flask import render_template, request, session, redirect, url_for, flash
 from app import app
+from app import models
 
-# This is a temporary route so that you can verify the server launches successfully.
+# Secure User sessions rely on the Secret Key
+app.secret_key = app.config['SECRET_KEY']
+
 @app.route('/')
-def home():
-    return "<h1>HappyTummy Backend Server is securely running!</h1>"
+@app.route('/landing')
+def landing():
+    """Renders the main homepage."""
+    return render_template('landing.html')
+
+@app.route('/auth', methods=['GET', 'POST'])
+def auth():
+    """Handles both GET viewing of the login page, and POST submissions for Login/Signup."""
+    
+    # If a user is already securely logged in via session, redirect them to the menu
+    if 'customer_id' in session:
+        return redirect(url_for('menu'))
+
+    if request.method == 'POST':
+        action = request.form.get('action') # Distinguishes if form was Login or Signup
+        
+        if action == 'login':
+            email = request.form.get('email')
+            password = request.form.get('password')
+            
+            # Query models.py DB function
+            user = models.verify_user(email, password)
+            if user:
+                # Login logic: set securely encypted session cookie
+                session['customer_id'] = user['customerId']
+                session['user_name'] = user['fname']
+                flash('Successfully logged in!', 'success')
+                return redirect(url_for('menu'))
+            else:
+                flash('Invalid credentials. Please try again.', 'error')
+                
+        elif action == 'signup':
+            # Collect data from Signup fields
+            fname = request.form.get('fname')
+            lname = request.form.get('lname', '')
+            email = request.form.get('email')
+            password = request.form.get('password')
+            phone = request.form.get('phone', 'N/A')
+            houseName = request.form.get('houseName', 'N/A')
+            street = request.form.get('street', 'N/A')
+            city = request.form.get('city', 'N/A')
+            pincode = request.form.get('pincode', 0)
+            
+            success = models.create_user(fname, lname, email, password, phone, houseName, street, city, pincode)
+            if success:
+                flash('Account created! Please log in.', 'success')
+            else:
+                flash('Error creating account. Email may already exist.', 'error')
+                
+    return render_template('auth.html')
+
+@app.route('/logout')
+def logout():
+    """Securely wipes the encrypted session cookie on user logout."""
+    session.clear()
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('landing'))
+
+
+@app.route('/menu')
+def menu():
+    """Fetches real-time DB menu rows and passes them into our HTML."""
+    items = models.get_all_menu_items()
+    # Sending 'items' dictionary to Jinja engine inside menu.html
+    return render_template('menu.html', menu_items=items)
+
+
+@app.route('/cart')
+def cart():
+    """Requires the user to be active. Computes cart math via Models DB query."""
+    if 'customer_id' not in session:
+        flash('Please login to view your cart.', 'error')
+        return redirect(url_for('auth'))
+        
+    items = models.get_cart_items(session['customer_id'])
+    
+    # Calculate cart total quickly in Python 
+    cart_total = sum(float(item['totalAmount']) for item in items)
+    
+    return render_template('cart.html', cart_items=items, total=cart_total)
+
+
+@app.route('/add_to_cart', methods=['POST'])
+def add_cart():
+    """Invisible POST route to insert to Cart then reload the menu gracefully."""
+    if 'customer_id' not in session:
+        return redirect(url_for('auth'))
+        
+    # Incoming data from HTML Form
+    item_id = request.form.get('item_id')
+    price = request.form.get('price')
+    quantity = int(request.form.get('quantity', 1))
+    
+    # Map to Real-Time Update Function
+    models.add_to_cart(session['customer_id'], item_id, quantity, price)
+    
+    flash('Item added to cart!', 'success')
+    return redirect(url_for('menu'))

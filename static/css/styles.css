@@ -9,7 +9,7 @@
 
         .hero {
             height: 300px;
-            background: url('cuisine.jpg') center/cover no-repeat;
+            background: url('../images/restHeader.png') center/cover no-repeat;
             display: flex;
             align-items: center;
             position: relative;
