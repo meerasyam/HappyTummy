@@ -18,7 +18,7 @@ function updateTotals() {
 
 // Quantity buttons
 document.querySelectorAll('.qty-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function () {
         const item = this.closest('.cart-item');
         const qtySpan = item.querySelector('.qty');
         let qty = parseInt(qtySpan.textContent);
@@ -41,22 +41,19 @@ document.querySelectorAll('.qty-btn').forEach(btn => {
 
 // Remove item buttons
 document.querySelectorAll('.remove-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function () {
         const item = this.closest('.cart-item');
         item.remove();
         updateTotals();
     });
 });
 
-// Payment button
-document.querySelector('.send-btn').addEventListener('click', function(e) {
-    e.preventDefault(); // Prevent form submission
-    window.location.href = 'orderPlaced.html';
-});
+// Removed broken dummy redirect logic for the Send Button! 
+// Now it natively triggers the HTML <form> POST firing directly to python views.py /checkout
 
 // Address select
 document.querySelectorAll('input[name="address"]').forEach(radio => {
-    radio.addEventListener('change', function() {
+    radio.addEventListener('change', function () {
         document.querySelectorAll('.address-option').forEach(opt => opt.classList.remove('selected'));
         this.closest('.address-option').classList.add('selected');
         const newFields = document.getElementById('newAddressFields');
@@ -73,10 +70,19 @@ document.querySelector('input[name="address"]:checked').closest('.address-option
 
 // Payment options
 document.querySelectorAll('.payment-option').forEach(btn => {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function () {
         document.querySelectorAll('.payment-option').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         const method = this.dataset.method;
+
+        // Securely sync the visible UI click state directly into the hidden Form Input for the Python Backend!
+        const modeInput = document.getElementById('selectedPaymentMode');
+        if (modeInput) {
+            if (method === 'card') modeInput.value = 'Credit/Debit Card';
+            else if (method === 'upi') modeInput.value = 'UPI App';
+            else modeInput.value = 'Cash on Delivery';
+        }
+
         const cardDetails = document.querySelector('.card-details');
         const upiDetails = document.querySelector('.upi-details');
         if (method === 'card') {

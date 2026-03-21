@@ -45,131 +45,20 @@
 
     <div class="container">
 
-        <!-- Restaurant 1 -->
-        <a href="menu.html" class="card">
-            <img src="../static/images/cheesyPizza.jpg" alt="Pizza Kottaram">
+        {% for restaurant in restaurants %}
+        <a href="/menu/{{ restaurant.restaurantId }}" class="card">
+            <img src="{{ restaurant.imageurl }}" alt="{{ restaurant.restaurantName }}">
             <div class="card-info">
-                <h2>Pizza Kottaram</h2>
+                <h2>{{ restaurant.restaurantName }}</h2>
                 <div class="rating">★★★★★</div>
                 <div class="tags">
-                    <span>Italian</span>
-                    <span>Pizza</span>
+                    <span>{{ restaurant.location }}</span>
                 </div>
-                <p>Baked Fresh. Served With Love! Experience true authentic Italian cuisine.</p>
+                <p><i class="fa-solid fa-phone"></i> {{ restaurant.phone }}</p>
+                <p style="margin-top:5px; font-weight:600; color:#FFAA00;">View Full Menu &rarr;</p>
             </div>
         </a>
-
-        <!-- Restaurant 2 -->
-        <a href="menu.html" class="card">
-            <img src="../static/images/SalmonNigiri (1).jpg" alt="Sushi Kada">
-            <div class="card-info">
-                <h2>Sushi Kada</h2>
-                <div class="rating">★★★★★</div>
-                <div class="tags">
-                    <span>Japanese</span>
-                    <span>Seafood</span>
-                </div>
-                <p>From Sea to Sushi. Premium imported sushi grade cuts delivered straight to your door.</p>
-            </div>
-        </a>
-
-        <!-- Restaurant 3 -->
-        <a href="menu.html" class="card">
-            <img src="../static/images/kuzhiMandi (1).jpg" alt="Mandhi Kada">
-            <div class="card-info">
-                <h2>Njetikkal Mandhi Kada</h2>
-                <div class="rating">★★★★★</div>
-                <div class="tags">
-                    <span>Arabian</span>
-                    <span>Mandhi</span>
-                </div>
-                <p>Spicy authentic mandhi that will truly make you say "Njetti!"</p>
-            </div>
-        </a>
-
-        <!-- Restaurant 4 -->
-        <a href="menu.html" class="card">
-            <img src="../static/images/Chayakada.jpeg" alt="Howweda Chayakada">
-            <div class="card-info">
-                <h2>Howweda Chayakada</h2>
-                <div class="rating">★★★★☆</div>
-                <div class="tags">
-                    <span>Tea</span>
-                    <span>Snacks</span>
-                </div>
-                <p>Hot evening chaya and traditional bites served with full nostalgic vibes.</p>
-            </div>
-        </a>
-
-        <!-- Restaurant 5 -->
-        <a href="menu.html" class="card">
-            <img src="../static/images/LemonSarbath.jpg" alt="Ikkakkante Sarbath">
-            <div class="card-info">
-                <h2>Ikkakkante Sarbath</h2>
-                <div class="rating">★★★★★</div>
-                <div class="tags">
-                    <span>Cool Drinks</span>
-                    <span>Summer</span>
-                </div>
-                <p>Legendary sarbath shop serving refreshing, timeless vintage flavors perfectly chilled.</p>
-            </div>
-        </a>
-
-        <!-- Restaurant 6 -->
-        <a href="menu.html" class="card">
-            <img src="../static/images/matcha_kudicho.jpeg" alt="Matcha Kudicha">
-            <div class="card-info">
-                <h2>Matcha Kudicha?</h2>
-                <div class="rating">★★★★★</div>
-                <div class="tags">
-                    <span>Matcha</span>
-                    <span>Cafe</span>
-                </div>
-                <p>Trendy, vibrant matcha beverages exclusively curated for aesthetic coffee lovers.</p>
-            </div>
-        </a>
-
-        <!-- Restaurant 7 -->
-        <a href="menu.html" class="card">
-            <img src="../static/images/ClassicCheeseBurger.jpg" alt="Vedikkett Burger">
-            <div class="card-info">
-                <h2>Vedikkett Burger</h2>
-                <div class="rating">★★★★☆</div>
-                <div class="tags">
-                    <span>Fast Food</span>
-                    <span>Burger</span>
-                </div>
-                <p>Burger Kazhichaal Vedikkett Satisfaction! Thick, juicy artisan patties.</p>
-            </div>
-        </a>
-
-        <!-- Restaurant 8 -->
-        <a href="menu.html" class="card">
-            <img src="../static/images/BunPorotta (1).jpg" alt="Porotta Adich">
-            <div class="card-info">
-                <h2>Porotta Adich Keri Vaaa</h2>
-                <div class="rating">★★★★★</div>
-                <div class="tags">
-                    <span>Kerala</span>
-                    <span>Porotta</span>
-                </div>
-                <p>Taste the True Kerala Classic! Flaky, perfectly roasted layers of tradition.</p>
-            </div>
-        </a>
-
-        <!-- Restaurant 9 -->
-        <a href="menu.html" class="card">
-            <img src="../static/images/ChickenBiriyani (1).jpg" alt="Theeppori Biryani">
-            <div class="card-info">
-                <h2>Theeppori Biryani</h2>
-                <div class="rating">★★★★★</div>
-                <div class="tags">
-                    <span>Biryani</span>
-                    <span>Spicy</span>
-                </div>
-                <p>Fiery spicy biryani loaded with profound masala that sets your taste buds on fire!</p>
-            </div>
-        </a>
+        {% endfor %}
 
     </div>
 

@@ -17,18 +17,32 @@
       <span class="brand-bold">Happy</span><span class="brand-colored">Tummy</span>
     </a>
     <div class="nav-items">
-      <a href="landing.html" class="nav-link"><i class="fa-solid fa-house"></i> <span>Home</span></a>
-      <a href="#" class="nav-link"><i class="fa-solid fa-cart-shopping"></i> <span>Cart</span></a>
-      <a href="#" class="nav-link"><i class="fa-solid fa-user"></i> <span>Account</span></a>
+      <a href="/landing" class="nav-link"><i class="fa-solid fa-house"></i> <span>Home</span></a>
+      <a href="/restaurants" class="nav-link active"><i class="fa-solid fa-utensils"></i> <span>Restaurants</span></a>
+      <a href="/cart" class="nav-link"><i class="fa-solid fa-cart-shopping"></i> <span>Cart</span></a>
+      <a href="/auth" class="nav-link"><i class="fa-solid fa-user"></i> <span>Account</span></a>
     </div>
   </nav>
 
-  <header class="menu-hero">
+  <header class="menu-hero"
+    style="background: url('{{ restaurant.imageurl }}') no-repeat center center; background-size: cover;">
     <div class="hero-overlay"></div>
-    <h1 class="hero-text">Explore Our Flavours</h1>
+    <h1 class="hero-text">Welcome to {{ restaurant.restaurantName }}</h1>
   </header>
 
   <section class="menu-section">
+
+    <!-- Jinja Flash Message Injection -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="flash-message flash-{{ category }}"
+      style="text-align:center; padding: 10px; margin-bottom:20px; border-radius: 5px; background: {% if category == 'error' %}#ffeaea{% else %}#eaffea{% endif %}; color: {% if category == 'error' %}#d32f2f{% else %}#2e7d32{% endif %}; font-weight: bold;">
+      {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 
     <div class="menu-controls">
       <div class="search-box">
@@ -44,80 +58,39 @@
 
     <div class="menu-list">
 
-      <div class="menu-card" data-veg="false">
-        <img src="../static/images/HawaiianPizza (1).jpg" alt="Hawaiian Pizza" class="menu-image">
-        <div class="menu-content">
-          <div class="menu-header">
-            <h3 class="menu-name">Hawaiian Pizza</h3>
-            <span class="menu-price">$12.99</span>
-          </div>
-          <p class="menu-description">A tropical classic! Topped with savory ham, sweet pineapple, and extra mozzarella
-            cheese on a freshly baked crust.</p>
-          <div class="menu-actions">
-            <button class="btn-add-cart" type="button">Add to Cart</button>
-          </div>
-        </div>
-      </div>
+      {% for item in menu_items %}
+      <div class="menu-card" data-veg="{% if item.isVeg %}true{% else %}false{% endif %}">
+        <img src="{{ item.imageurl }}" alt="{{ item.itemName }}" class="menu-image">
 
-      <div class="menu-card" data-veg="true">
-        <img src="../static/images/vegPizza.jpg" alt="Veg Pizza" class="menu-image">
         <div class="menu-content">
           <div class="menu-header">
-            <h3 class="menu-name">Veg Pizza</h3>
-            <span class="menu-price">$10.99</span>
+            <h3 class="menu-name">
+              {{ item.itemName }}
+              {% if item.isVeg %}
+              <span
+                style="display:inline-block; border: 2px solid green; color: green; border-radius: 4px; padding: 0px 4px; font-size: 0.7em; margin-left: 5px;">VEG</span>
+              {% else %}
+              <span
+                style="display:inline-block; border: 2px solid red; color: red; border-radius: 4px; padding: 0px 4px; font-size: 0.7em; margin-left: 5px;">NON-VEG</span>
+              {% endif %}
+            </h3>
+            <span class="menu-price">Rs. {{ item.price }}</span>
           </div>
-          <p class="menu-description">A garden delight featuring fresh bell peppers, red onions, mushrooms, and black
-            olives over rich tomato sauce.</p>
+          <p class="menu-description">{{ item.description }}</p>
           <div class="menu-actions">
-            <button class="btn-add-cart" type="button">Add to Cart</button>
-          </div>
-        </div>
-      </div>
 
-      <div class="menu-card" data-veg="false">
-        <img src="../static/images/bbqPizza (1).jpg" alt="BBQ Pizza" class="menu-image">
-        <div class="menu-content">
-          <div class="menu-header">
-            <h3 class="menu-name">BBQ Pizza</h3>
-            <span class="menu-price">$14.49</span>
-          </div>
-          <p class="menu-description">Tangy BBQ sauce topped with grilled chicken, red onions, and a touch of cilantro
-            for the perfect smoky flavor.</p>
-          <div class="menu-actions">
-            <button class="btn-add-cart" type="button">Add to Cart</button>
-          </div>
-        </div>
-      </div>
+            <form action="/add_to_cart" method="POST" style="margin: 0; display:flex; align-items:center;">
+              <input type="hidden" name="item_id" value="{{ item.itemId }}">
+              <input type="hidden" name="price" value="{{ item.price }}">
+              <input type="number" name="quantity" value="1" min="1" max="99"
+                style="width: 50px; padding: 8px; margin-right: 15px; border-radius: 6px; border: 1px solid #ddd; font-weight: bold; text-align:center;">
+              <button class="btn-add-cart" type="submit"><i class="fa-solid fa-plus"></i> Add to Cart</button>
+            </form>
 
-      <div class="menu-card" data-veg="true">
-        <img src="../static/images/cheesyPizza.jpg" alt="Cheezy Pizza" class="menu-image">
-        <div class="menu-content">
-          <div class="menu-header">
-            <h3 class="menu-name">Cheezy Pizza</h3>
-            <span class="menu-price">$11.99</span>
-          </div>
-          <p class="menu-description">For the cheese lovers! Delicious pizza featuring a blend of four cheeses melted to
-            perfection.</p>
-          <div class="menu-actions">
-            <button class="btn-add-cart" type="button">Add to Cart</button>
           </div>
         </div>
       </div>
-
-      <div class="menu-card" data-veg="false">
-        <img src="../static/images/meatLoversPizza (1).jpg" alt="Meat Lovers Pizza" class="menu-image">
-        <div class="menu-content">
-          <div class="menu-header">
-            <h3 class="menu-name">Meat Lovers Pizza</h3>
-            <span class="menu-price">$15.99</span>
-          </div>
-          <p class="menu-description">Hearty and filling! Packed to the brim with pepperoni, sausage, bacon, and
-            seasoned ground beef.</p>
-          <div class="menu-actions">
-            <button class="btn-add-cart" type="button">Add to Cart</button>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
 
     </div>
   </section>

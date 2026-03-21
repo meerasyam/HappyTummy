@@ -40,6 +40,18 @@
             <!-- Authenticaton Form Panel -->
             <div class="auth-form-panel">
 
+                <!-- Jinja Flash Message Injection -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}"
+                    style="text-align:center; padding: 10px; margin-bottom:15px; border-radius: 5px; background: {% if category == 'error' %}#ffeaea{% else %}#eaffea{% endif %}; color: {% if category == 'error' %}#d32f2f{% else %}#2e7d32{% endif %}; font-weight: bold;">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
                 <!-- LOGIN FORM -->
                 <div class="auth-form-wrapper" id="login-form">
                     <div class="form-header">
@@ -47,12 +59,15 @@
                         <p>Please enter your credentials to login</p>
                     </div>
 
-                    <form action="#" method="POST">
+                    <form action="/auth" method="POST">
+                        <input type="hidden" name="action" value="login">
+
                         <div class="input-group">
                             <label>Email Address</label>
                             <div class="input-wrapper">
                                 <i class="fa-regular fa-envelope"></i>
-                                <input type="email" class="input-field" placeholder="Enter your email" required>
+                                <input type="email" name="email" class="input-field" placeholder="Enter your email"
+                                    required>
                             </div>
                         </div>
 
@@ -60,7 +75,8 @@
                             <label>Password</label>
                             <div class="input-wrapper">
                                 <i class="fa-solid fa-lock"></i>
-                                <input type="password" class="input-field" placeholder="Enter your password" required>
+                                <input type="password" name="password" class="input-field"
+                                    placeholder="Enter your password" required>
                             </div>
                         </div>
 
@@ -86,20 +102,76 @@
                         <p>Join us to explore delicious meals</p>
                     </div>
 
-                    <form action="#" method="POST">
-                        <div class="input-group">
-                            <label>Full Name</label>
-                            <div class="input-wrapper">
-                                <i class="fa-regular fa-user"></i>
-                                <input type="text" class="input-field" placeholder="John Doe" required>
+                    <form action="/auth" method="POST">
+                        <input type="hidden" name="action" value="signup">
+
+                        <div style="display: flex; gap: 15px;">
+                            <div class="input-group" style="flex: 1;">
+                                <label>First Name</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-regular fa-user"></i>
+                                    <input type="text" name="fname" class="input-field" placeholder="John" required>
+                                </div>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Last Name</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-regular fa-user"></i>
+                                    <input type="text" name="lname" class="input-field" placeholder="Doe" required>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="input-group">
-                            <label>Email Address</label>
-                            <div class="input-wrapper">
-                                <i class="fa-regular fa-envelope"></i>
-                                <input type="email" class="input-field" placeholder="Enter your email" required>
+                        <div style="display: flex; gap: 15px;">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Email Address</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-regular fa-envelope"></i>
+                                    <input type="email" name="email" class="input-field" placeholder="Email" required>
+                                </div>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Phone</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-phone"></i>
+                                    <input type="tel" name="phone" class="input-field" placeholder="Phone" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 15px;">
+                            <div class="input-group" style="flex: 1;">
+                                <label>House / Flat Name</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-house"></i>
+                                    <input type="text" name="houseName" class="input-field" placeholder="House"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Street / Road</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-road"></i>
+                                    <input type="text" name="street" class="input-field" placeholder="Street" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 15px;">
+                            <div class="input-group" style="flex: 1;">
+                                <label>City</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-city"></i>
+                                    <input type="text" name="city" class="input-field" placeholder="City" required>
+                                </div>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Pincode</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-map-pin"></i>
+                                    <input type="text" name="pincode" class="input-field" placeholder="Pincode"
+                                        required>
+                                </div>
                             </div>
                         </div>
 
@@ -107,12 +179,12 @@
                             <label>Password</label>
                             <div class="input-wrapper">
                                 <i class="fa-solid fa-lock"></i>
-                                <input type="password" class="input-field" placeholder="Create a strong password"
-                                    required>
+                                <input type="password" name="password" class="input-field"
+                                    placeholder="Create a strong password" required>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn-auth">Sign Up</button>
+                        <button type="submit" class="btn-auth" style="margin-top: 15px;">Sign Up</button>
                     </form>
 
                     <div class="auth-switch">
