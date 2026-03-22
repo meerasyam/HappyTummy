@@ -139,6 +139,39 @@ def get_user_info(customer_id):
     conn.close()
     return user_info
 
+def get_order_history(customer_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Grab main orders sorted by latest
+    sql = """
+        SELECT orderId, timestamp, totalAmount, status
+        FROM ORDERS 
+        WHERE customerId = %s
+        ORDER BY timestamp DESC
+    """
+    cursor.execute(sql, (customer_id,))
+    orders = cursor.fetchall()
+    
+    # For each order, fetch items string grouped
+    for order in orders:
+        item_sql = """
+            SELECT m.itemName, od.quantity
+            FROM ORDER_DETAILS od
+            JOIN MENU_ITEMS m ON od.itemId = m.itemId
+            WHERE od.orderId = %s
+        """
+        cursor.execute(item_sql, (order['orderId'],))
+        items = cursor.fetchall()
+        
+        # Build string "Margherita x1, Coke x2" dynamically
+        item_strings = [f"{it['itemName']} x{it['quantity']}" for it in items]
+        order['items_summary'] = ", ".join(item_strings)
+        
+    cursor.close()
+    conn.close()
+    return orders
+
 def update_cart_quantity(customer_id, cart_id, action):
     conn = get_db_connection()
     cursor = conn.cursor()

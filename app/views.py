@@ -17,7 +17,7 @@ def auth():
     
     # If a user is already securely logged in via session, redirect them to the restaurants page
     if 'customer_id' in session:
-        return redirect(url_for('restaurants'))
+        return redirect(url_for('myAccount'))
 
     if request.method == 'POST':
         action = request.form.get('action') # Distinguishes if form was Login or Signup
@@ -57,12 +57,23 @@ def auth():
                 
     return render_template('auth.html')
 
-@app.route('/logout')
+@app.route('/logout', methods=['GET', 'POST'])
 def logout():
     """Securely wipes the encrypted session cookie on user logout."""
     session.clear()
     flash('You have been logged out.', 'success')
     return redirect(url_for('landing'))
+
+@app.route('/myAccount')
+def myAccount():
+    """Provides a dedicated portal showcasing explicit DB queries for User Profiles inside myAccount.html"""
+    if 'customer_id' not in session:
+        flash('Please login to view your account.', 'error')
+        return redirect(url_for('auth'))
+        
+    user_info = models.get_user_info(session['customer_id'])
+    orders = models.get_order_history(session['customer_id'])
+    return render_template('myAccount.html', user=user_info, orders=orders)
 
 
 @app.route('/restaurants')
