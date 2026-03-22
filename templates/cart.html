@@ -12,19 +12,16 @@
 </head>
 
 <body>
-    <!-- Navbar -->
+    <!-- Standardized Navbar -->
     <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <span class="logo-text">
-                    <span class="logo-colored">Happy</span><span class="logo-bold">Tummy</span>
-                </span>
-            </div>
-            <div class="nav-buttons">
-                <button class="nav-btn" onclick="window.location.href='/restaurants'">Restaurants</button>
-                <button class="nav-btn" onclick="window.location.href='/cart'">Cart</button>
-                <button class="nav-btn" onclick="window.location.href='/auth'">My Profile</button>
-            </div>
+        <a href="/landing" class="nav-brand">
+            <span class="brand-bold">Happy</span><span class="brand-colored">Tummy</span>
+        </a>
+        <div class="nav-items">
+            <a href="/landing" class="nav-link"><i class="fa-solid fa-house"></i> <span>Home</span></a>
+            <a href="/restaurants" class="nav-link"><i class="fa-solid fa-utensils"></i> <span>Restaurants</span></a>
+            <a href="/cart" class="nav-link active"><i class="fa-solid fa-cart-shopping"></i> <span>Cart</span></a>
+            <a href="/auth" class="nav-link"><i class="fa-solid fa-user"></i> <span>Account</span></a>
         </div>
     </nav>
 
@@ -40,8 +37,7 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         {% for category, message in messages %}
-        <div class="flash-message flash-{{ category }}"
-            style="text-align:center; padding: 10px; margin-bottom:15px; grid-column: 1 / -1; border-radius: 5px; background: {% if category == 'error' %}#ffeaea{% else %}#eaffea{% endif %}; color: {% if category == 'error' %}#d32f2f{% else %}#2e7d32{% endif %}; font-weight: bold;">
+        <div class="flash-message flash-{{ category }}">
             {{ message }}
         </div>
         {% endfor %}
@@ -59,14 +55,29 @@
                     <div class="item-details">
                         <h3>{{ item.itemName }}</h3>
                         <div class="quantity-controls">
-                            <span style="font-weight:600; color:#888; margin-right:5px;">Qty: </span>
+                            <span class="qty-label">Qty: </span>
+
+                            <form action="/update_cart/{{ item.cartId }}/decrease" method="POST" class="qty-form">
+                                <button type="submit" class="qty-btn">-</button>
+                            </form>
+
                             <span class="qty">{{ item.quantity }}</span>
+
+                            <form action="/update_cart/{{ item.cartId }}/increase" method="POST" class="qty-form">
+                                <button type="submit" class="qty-btn">+</button>
+                            </form>
+
+                            <form action="/update_cart/{{ item.cartId }}/remove" method="POST" class="remove-form">
+                                <button type="submit" class="remove-btn" title="Remove Item">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
                     <div class="item-price">Rs. {{ item.totalAmount }}</div>
                 </div>
                 {% else %}
-                <div style="padding: 20px; text-align:center; color:#666;">Your cart is delightfully empty!</div>
+                <div class="empty-cart-msg">Your cart is delightfully empty!</div>
                 {% endfor %}
             </div>
 
@@ -75,13 +86,9 @@
                     <span>Subtotal</span>
                     <span>Rs. {{ ns.subtotal }}</span>
                 </div>
-                <div class="summary-row">
-                    <span>Delivery Charge</span>
-                    <span>Rs. {% if ns.subtotal > 0 %}30{% else %}0{% endif %}</span>
-                </div>
                 <div class="summary-row total">
                     <span>To Pay</span>
-                    <span>Rs. {% if ns.subtotal > 0 %}{{ ns.subtotal + 30 }}{% else %}0{% endif %}</span>
+                    <span>Rs. {{ ns.subtotal }}</span>
                 </div>
             </div>
         </div>
@@ -108,38 +115,9 @@
                         <input type="radio" id="home" name="address" value="home" checked>
                         <label for="home">
                             <strong>Home Address</strong><br>
-                            123 Main St, City, State 12345
+                            {{ user.houseName }}, {{ user.street }}<br>
+                            {{ user.city }} - {{ user.pincode }}
                         </label>
-                    </div>
-                    <div class="address-option">
-                        <input type="radio" id="new" name="address" value="new">
-                        <label for="new">
-                            <strong>Add New Address</strong>
-                        </label>
-                    </div>
-                </div>
-                <div id="newAddressFields" style="display: none;">
-                    <div class="form-group">
-                        <label for="country">House / Apartment</label>
-                        <input type="text" id="country" name="country">
-                    </div>
-                    <div class="form-group">
-                        <label for="street">Street</label>
-                        <input type="text" id="street" name="street">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="houseNumber">City</label>
-                            <input type="text" id="houseNumber" name="houseNumber">
-                        </div>
-                        <div class="form-group">
-                            <label for="apartmentNumber">Pincode</label>
-                            <input type="text" id="apartmentNumber" name="apartmentNumber">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="municipality">Other Landmarks</label>
-                        <input type="text" id="municipality" name="municipality">
                     </div>
                 </div>
 

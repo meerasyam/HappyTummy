@@ -1,52 +1,4 @@
-// Function to update totals
-function updateTotals() {
-    let subtotal = 0;
-    const items = document.querySelectorAll('.cart-item');
-    items.forEach(item => {
-        const qty = parseInt(item.querySelector('.qty').textContent);
-        const priceText = item.querySelector('.item-price').textContent;
-        const price = parseInt(priceText.replace('₹', ''));
-        subtotal += price * qty;
-    });
-    const delivery = 30;
-    const total = subtotal + delivery;
-
-    document.querySelector('.summary-row:nth-child(1) span:last-child').textContent = '₹' + subtotal;
-    document.querySelector('.summary-row:nth-child(3) span:last-child').textContent = '₹' + total;
-    document.querySelector('.summary-row.total span:last-child').textContent = '₹' + total;
-}
-
-// Quantity buttons
-document.querySelectorAll('.qty-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
-        const item = this.closest('.cart-item');
-        const qtySpan = item.querySelector('.qty');
-        let qty = parseInt(qtySpan.textContent);
-        const priceText = item.querySelector('.item-price').textContent;
-        const unitPrice = parseInt(priceText.replace('₹', '')) / qty; // assuming initial qty is 1
-
-        if (this.textContent === '+') {
-            qty++;
-        } else if (this.textContent === '-' && qty > 0) {
-            qty--;
-        }
-        qtySpan.textContent = qty;
-        item.querySelector('.item-price').textContent = '₹' + (unitPrice * qty);
-        if (qty === 0) {
-            item.remove();
-        }
-        updateTotals();
-    });
-});
-
-// Remove item buttons
-document.querySelectorAll('.remove-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
-        const item = this.closest('.cart-item');
-        item.remove();
-        updateTotals();
-    });
-});
+// Removed totally completely broken updateTotals() and frontend Qty listeners because math is securely handled on the backend!
 
 // Removed broken dummy redirect logic for the Send Button! 
 // Now it natively triggers the HTML <form> POST firing directly to python views.py /checkout
@@ -98,5 +50,4 @@ document.querySelectorAll('.payment-option').forEach(btn => {
     });
 });
 
-// Initial total update
-updateTotals();
+// Initial calculations securely rendered by Flask Jinja so no startup JS needed

@@ -129,6 +129,53 @@ def get_cart_items(customer_id):
     conn.close()
     return cart_items
 
+def get_user_info(customer_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM CUSTOMER WHERE customerId = %s", (customer_id,))
+    user_info = cursor.fetchone()
+    
+    cursor.close()
+    conn.close()
+    return user_info
+
+def update_cart_quantity(customer_id, cart_id, action):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Needs to get unit price from MENU_ITEMS to safely increment 'totalAmount' by exactly 1 unit's price
+    sql = """
+        SELECT c.quantity, c.totalAmount, m.price 
+        FROM CART c
+        JOIN MENU_ITEMS m ON c.itemId = m.itemId
+        WHERE c.cartId = %s AND c.customerId = %s
+    """
+    cursor.execute(sql, (cart_id, customer_id))
+    row = cursor.fetchone()
+    if not row:
+        return
+        
+    qty, total_amt, unit_price = row
+    
+    if action == 'increase':
+        qty += 1
+        total_amt += float(unit_price)
+        cursor.execute("UPDATE CART SET quantity = %s, totalAmount = %s WHERE cartId = %s", (qty, total_amt, cart_id))
+    elif action == 'decrease':
+        if qty > 1:
+            qty -= 1
+            total_amt -= float(unit_price)
+            cursor.execute("UPDATE CART SET quantity = %s, totalAmount = %s WHERE cartId = %s", (qty, total_amt, cart_id))
+        else:
+            # If they hit 0, remove it entirely
+            cursor.execute("DELETE FROM CART WHERE cartId = %s", (cart_id,))
+    elif action == 'remove':
+        cursor.execute("DELETE FROM CART WHERE cartId = %s", (cart_id,))
+        
+    conn.commit()
+    cursor.close()
+    conn.close()
+
 
 def place_order(customer_id, payment_mode):
     """

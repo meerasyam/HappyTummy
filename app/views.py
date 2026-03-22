@@ -97,11 +97,21 @@ def cart():
         return redirect(url_for('auth'))
         
     items = models.get_cart_items(session['customer_id'])
+    user_info = models.get_user_info(session['customer_id'])
     
     # Calculate cart total quickly in Python 
     cart_total = sum(float(item['totalAmount']) for item in items)
     
-    return render_template('cart.html', cart_items=items, total=cart_total)
+    return render_template('cart.html', cart_items=items, total=cart_total, user=user_info)
+
+@app.route('/update_cart/<int:cart_id>/<action>', methods=['POST'])
+def update_cart(cart_id, action):
+    """Securely manages increasing, decreasing or dropping items directly out of MySQL"""
+    if 'customer_id' not in session:
+        return redirect(url_for('auth'))
+    
+    models.update_cart_quantity(session['customer_id'], cart_id, action)
+    return redirect(url_for('cart'))
 
 
 @app.route('/add_to_cart', methods=['POST'])
