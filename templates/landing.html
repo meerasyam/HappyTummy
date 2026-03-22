@@ -34,8 +34,13 @@
             </nav>
 
             <div class="header-auth">
-                <a href="#" class="btn btn-outline-primary">Login</a>
-                <a href="#" class="btn btn-primary">Sign Up</a>
+                {% if session.get('customer_id') %}
+                <a href="/restaurants" class="btn btn-outline-primary">Browse Food</a>
+                <a href="/myAccount" class="btn btn-primary">My Account</a>
+                {% else %}
+                <a href="/auth" class="btn btn-outline-primary">Login</a>
+                <a href="/auth" class="btn btn-primary">Sign Up</a>
+                {% endif %}
             </div>
         </div>
     </header>
@@ -51,8 +56,13 @@
                 <p class="hero-subtitle">Experience the finest dining from the comfort of your couch. We bring the
                     city's top-rated kitchens directly to your doorstep with lightning-fast delivery.</p>
                 <div class="hero-auth-row">
-                    <a href="#" class="btn btn-outline-primary btn-large">Login</a>
-                    <a href="#" class="btn btn-primary btn-large">Sign Up</a>
+                    {% if session.get('customer_id') %}
+                    <a href="/restaurants" class="btn btn-primary btn-large">Order Now! <i
+                            class="fa-solid fa-arrow-right"></i></a>
+                    {% else %}
+                    <a href="/auth" class="btn btn-outline-primary btn-large">Login</a>
+                    <a href="/auth" class="btn btn-primary btn-large">Sign Up</a>
+                    {% endif %}
                 </div>
             </div>
             <div class="hero-image-wrapper"></div>
@@ -227,4 +237,5 @@
         </div>
     </footer>
 </body>
+
 </html>

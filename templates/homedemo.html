@@ -1,161 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Happy Tummy</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel ="stylesheet" href="../static/css/styles.css">
-    
+    <title>Restaurants | HappyTummy</title>
+    <!-- Import FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/styles.css">
 </head>
 
 <body>
 
-    <!-- HERO SECTION -->
-<div class="hero">
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <a href="/landing" class="nav-brand">
+            <span class="brand-bold">Happy</span><span class="brand-colored">Tummy</span>
+        </a>
+        <div class="nav-items">
+            <a href="/landing" class="nav-link"><i class="fa-solid fa-house"></i> <span>Home</span></a>
+            <a href="/restaurants" class="nav-link active"><i class="fa-solid fa-utensils"></i>
+                <span>Restaurants</span></a>
+            <a href="/cart" class="nav-link"><i class="fa-solid fa-cart-shopping"></i> <span>Cart</span></a>
+            <a href="/auth" class="nav-link"><i class="fa-solid fa-user"></i> <span>Account</span></a>
+        </div>
+    </nav>
 
-    <div class="hero-center">
+    <!-- HERO SECTION -->
+    <header class="hero">
         <h1>HappyTummy Offers You</h1>
         <h2>The Best Tasting Experience!</h2>
+    </header>
+
+    <!-- SEARCH BOX -->
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" id="restaurantSearch" placeholder="Search for your favorite restaurants...">
+            <button><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </div>
     </div>
-
-    <div class="hero-center">
-       
-    </div>
-
-</div>
-
-  <!-- SEARCH BOX -->
-<div class="search-box">
-    <input type="text" placeholder="Enter Restaurant Name">
-    <button>🔍</button>
-    
-</div>
-
-
 
     <!-- RESTAURANT LIST -->
-
-    <h2 class="section-title"></h2>
+    <h2 class="section-title">Explore Our Top Listed Partners</h2>
 
     <div class="container">
 
-    <div class="card">
-        <img src="pizzakottaram.jpg">
-        <div>
-            <h2>Pizza Kottaram</h2>
-            <p class="rating">★★★★★</p>
-            <div class="tags">
-                <span>Italian</span>
-                <span>Cheese</span>
+        {% for restaurant in restaurants %}
+        <a href="/menu/{{ restaurant.restaurantId }}" class="card">
+            <img src="{{ restaurant.imageurl }}" alt="{{ restaurant.restaurantName }}">
+            <div class="card-info">
+                <h2>{{ restaurant.restaurantName }}</h2>
+                <div class="rating">★★★★★</div>
+                <div class="tags">
+                    <span>{{ restaurant.location }}</span>
+                </div>
+                <p><i class="fa-solid fa-phone"></i> {{ restaurant.phone }}</p>
+                <p style="margin-top:5px; font-weight:600; color:#FFAA00;">View Full Menu &rarr;</p>
             </div>
-            <p>Baked Fresh. Served With Love!</p>
-        </div>
+        </a>
+        {% endfor %}
+
     </div>
 
-    <div class="card">
-        <img src="sushi.jpg">
-        <div>
-            <h2>Sushi Kada</h2>
-            <p class="rating">★★★★★</p>
-            <div class="tags">
-                <span>Japanese</span>
-                <span>Seafood</span>
-            </div>
-            <p>From Sea to Sushi.</p>
-        </div>
-    </div>
-
-    <div class="card">
-        <img src="mandi.jpg">
-        <div>
-            <h2>Njetikkal Mandhi Kada</h2>
-            <p class="rating">★★★★★</p>
-            <div class="tags">
-                <span>Arabian</span>
-                <span>Mandhi</span>
-            </div>
-            <p>Spicy mandhi that will truly make you say “Njetti!”</p>
-        </div>
-    </div>
-
-    <div class="card">
-        <img src="chayakada.jpg">
-        <div>
-            <h2>Howweda Chayakada</h2>
-            <p class="rating">★★★★★</p>
-            <div class="tags">
-                <span>Tea</span>
-                <span>Snacks</span>
-            </div>
-            <p>Evening chaya & kadi bites with full nostalgic vibes.</p>
-        </div>
-    </div>
-
-    <div class="card">
-        <img src="sarbath.jpg">
-        <div>
-            <h2>Ikkakkante Sarbath</h2>
-            <p class="rating">★★★★★</p>
-            <div class="tags">
-                <span>Cool Drinks</span>
-                <span>Summer</span>
-            </div>
-            <p>Legendary sarbath shop serving refreshing vintage flavors.</p>
-        </div>
-    </div>
-
-    <div class="card">
-        <img src="matcha.jpg">
-        <div>
-            <h2>Matcha Kudicha?</h2>
-            <p class="rating">★★★★★</p>
-            <div class="tags">
-                <span>Matcha</span>
-                <span>Cafe</span>
-            </div>
-            <p>Trendy matcha beverages for aesthetic coffee lovers.</p>
-        </div>
-    </div>
-
-    <div class="card">
-        <img src="burger.jpg">
-        <div>
-            <h2>Vedikkett Burger</h2>
-            <p class="rating">★★★★★</p>
-            <div class="tags">
-                <span>Fast Food</span>
-                <span>Burger</span>
-            </div>
-            <p>Burger Kazhichaal Vedikkett Satisfaction!.</p>
-        </div>
-    </div>
-
-    <div class="card">
-        <img src="porotta.jpg">
-        <div>
-            <h2>Porotta Adich Keri Vaaa</h2>
-            <p class="rating">★★★★★</p>
-            <div class="tags">
-                <span>Kerala</span>
-                <span>Porotta</span>
-            </div>
-            <p>Taste the True Kerala Classic!</p>
-        </div>
-    </div>
-
-    <div class="card">
-        <img src="biriyani.jpg">
-        <div>
-            <h2>Theeppori Biryani</h2>
-            <p class="rating">★★★★★</p>
-            <div class="tags">
-                <span>Biryani</span>
-                <span>Spicy</span>
-            </div>
-            <p>Fiery spicy biryani that sets your taste buds on fire 🔥</p>
-        </div>
-    </div>
-
-</div>
-
+    <!-- External Filtering script -->
+    <script src="../static/js/homedemo.js"></script>
 </body>
+
 </html>

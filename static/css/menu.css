@@ -76,7 +76,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1))
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
     z-index: 1;
 }
 
@@ -113,19 +113,45 @@ body {
 }
 
 .search-box {
-    flex: 1;
-    max-width: 400px;
-    padding: 12px 20px;
-    font-size: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.2s;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 5px 15px;
+    width: 100%;
+    max-width: 500px;
+    border: 1px solid #eee;
 }
 
-.search-box:focus {
-    border-color: #eeb44b;
-    box-shadow: 0 0 5px rgba(238, 180, 75, 0.3);
+.search-box input {
+    flex: 1;
+    padding: 10px 15px;
+    border: none;
+    outline: none;
+    font-size: 1.05rem;
+    font-family: inherit;
+    background: transparent;
+}
+
+.search-box button {
+    background: #FFAA00;
+    color: #fff;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-box button:hover {
+    background: #E69900;
+    transform: scale(1.02);
 }
 
 /* Veg Toggle Switch */
@@ -335,7 +361,8 @@ body {
     }
 
     .search-box {
-        max-width: unset;
-        /* Expand search bar completely on mobile */
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
     }
 }

@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HappyTummy - Cart</title>
     <link rel="stylesheet" href="../static/css/cart.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
-    <!-- Navbar -->
+    <!-- Standardized Navbar -->
     <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <span class="logo-text">
-                    <span class="logo-colored">Happy</span><span class="logo-bold">Tummy</span>
-                </span>
-            </div>
-            <div class="nav-buttons">
-                <button class="nav-btn" onclick="window.location.href='restaurants.html'">Restaurants</button>
-                <button class="nav-btn" onclick="window.location.href='menu.html'">Menu</button>
-                <button class="nav-btn" onclick="window.location.href='myAccount.html'">My Profile</button>
-            </div>
+        <a href="/landing" class="nav-brand">
+            <span class="brand-bold">Happy</span><span class="brand-colored">Tummy</span>
+        </a>
+        <div class="nav-items">
+            <a href="/landing" class="nav-link"><i class="fa-solid fa-house"></i> <span>Home</span></a>
+            <a href="/restaurants" class="nav-link"><i class="fa-solid fa-utensils"></i> <span>Restaurants</span></a>
+            <a href="/cart" class="nav-link active"><i class="fa-solid fa-cart-shopping"></i> <span>Cart</span></a>
+            <a href="/auth" class="nav-link"><i class="fa-solid fa-user"></i> <span>Account</span></a>
         </div>
     </nav>
 
@@ -33,69 +33,73 @@
 
     <!-- Main Content -->
     <div class="cart-container">
+        <!-- Jinja Flash Message Injection -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="flash-message flash-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
         <div class="cart-left">
             <h2 class="section-title">Your Order</h2>
             <div class="cart-items">
+                {% set ns = namespace(subtotal=0) %}
+                {% for item in cart_items %}
+                {% set ns.subtotal = ns.subtotal + item.totalAmount|float %}
                 <div class="cart-item">
-                    <img src="https://via.placeholder.com/80" alt="Pasta">
+                    <img src="{{ item.imageurl }}" alt="{{ item.itemName }}">
                     <div class="item-details">
-                        <h3>Pasta, kiwi and sauce chilli</h3>
+                        <h3>{{ item.itemName }}</h3>
                         <div class="quantity-controls">
-                            <button class="qty-btn">-</button>
-                            <span class="qty">1</span>
-                            <button class="qty-btn">+</button>
+                            <span class="qty-label">Qty: </span>
+
+                            <form action="/update_cart/{{ item.cartId }}/decrease" method="POST" class="qty-form">
+                                <button type="submit" class="qty-btn">-</button>
+                            </form>
+
+                            <span class="qty">{{ item.quantity }}</span>
+
+                            <form action="/update_cart/{{ item.cartId }}/increase" method="POST" class="qty-form">
+                                <button type="submit" class="qty-btn">+</button>
+                            </form>
+
+                            <form action="/update_cart/{{ item.cartId }}/remove" method="POST" class="remove-form">
+                                <button type="submit" class="remove-btn" title="Remove Item">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
-                    <div class="item-price">₹320</div>
+                    <div class="item-price">Rs. {{ item.totalAmount }}</div>
                 </div>
-                <div class="cart-item">
-                    <img src="https://via.placeholder.com/80" alt="Rice">
-                    <div class="item-details">
-                        <h3>Rice with shrimps and kiwi</h3>
-                        <div class="quantity-controls">
-                            <button class="qty-btn">-</button>
-                            <span class="qty">1</span>
-                            <button class="qty-btn">+</button>
-                        </div>
-                    </div>
-                    <div class="item-price">₹420</div>
-                </div>
-                <div class="cart-item">
-                    <img src="https://via.placeholder.com/80" alt="Burger">
-                    <div class="item-details">
-                        <h3>Chicken burger combo</h3>
-                        <div class="quantity-controls">
-                            <button class="qty-btn">-</button>
-                            <span class="qty">1</span>
-                            <button class="qty-btn">+</button>
-                        </div>
-                    </div>
-                    <div class="item-price">₹350</div>
-                </div>
+                {% else %}
+                <div class="empty-cart-msg">Your cart is delightfully empty!</div>
+                {% endfor %}
             </div>
+
             <div class="order-summary">
                 <div class="summary-row">
                     <span>Subtotal</span>
-                    <span>₹1090</span>
-                </div>
-                <div class="summary-row">
-                    <span>Delivery Charge</span>
-                    <span>₹30</span>
-                </div>
-                <div class="summary-row">
-                    <span>Total order</span>
-                    <span>₹1120</span>
+                    <span>Rs. {{ ns.subtotal }}</span>
                 </div>
                 <div class="summary-row total">
                     <span>To Pay</span>
-                    <span>₹1120</span>
+                    <span>Rs. {{ ns.subtotal }}</span>
                 </div>
             </div>
         </div>
 
         <div class="cart-right">
             <h2 class="section-title">Buyer Information</h2>
-            <form class="checkout-form">
+            <form action="/checkout" method="POST" class="checkout-form">
+
+                <!-- Hidden robust payment mode switch -->
+                <input type="hidden" name="payment_mode" id="selectedPaymentMode" value="Card">
+
                 <div class="form-group">
                     <label for="fullName">Full Name</label>
                     <input type="text" id="fullName" name="fullName" required>
@@ -111,38 +115,9 @@
                         <input type="radio" id="home" name="address" value="home" checked>
                         <label for="home">
                             <strong>Home Address</strong><br>
-                            123 Main St, City, State 12345
+                            {{ user.houseName }}, {{ user.street }}<br>
+                            {{ user.city }} - {{ user.pincode }}
                         </label>
-                    </div>
-                    <div class="address-option">
-                        <input type="radio" id="new" name="address" value="new">
-                        <label for="new">
-                            <strong>Add New Address</strong>
-                        </label>
-                    </div>
-                </div>
-                <div id="newAddressFields" style="display: none;">
-                    <div class="form-group">
-                        <label for="country">House / Apartment</label>
-                        <input type="text" id="country" name="country">
-                    </div>
-                    <div class="form-group">
-                        <label for="street">Street</label>
-                        <input type="text" id="street" name="street">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="houseNumber">City</label>
-                            <input type="text" id="houseNumber" name="houseNumber">
-                        </div>
-                        <div class="form-group">
-                            <label for="apartmentNumber">Pincode</label>
-                            <input type="text" id="apartmentNumber" name="apartmentNumber">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="municipality">Other Landmarks</label>
-                        <input type="text" id="municipality" name="municipality">
                     </div>
                 </div>
 
@@ -184,12 +159,12 @@
                     </div>
                 </div>
 
-                <button type="submit" class="send-btn">Order Now</button>
+                <button type="submit" class="send-btn" {% if not cart_items %}disabled{% endif %}>Order Now</button>
             </form>
         </div>
     </div>
     <script src="../static/js/cart.js"></script>
 </body>
+
 </html>
 </content>
-

@@ -147,8 +147,11 @@ body {
 /* Inner Forms wrapping logic */
 .auth-form-wrapper {
     width: 100%;
-    max-width: 350px;
     margin: 0 auto;
+}
+
+#login-form {
+    max-width: 350px;
 }
 
 .form-header {
@@ -288,6 +291,7 @@ body {
 /* Hidden Form Logic */
 #signup-form {
     display: none;
+    max-width: 600px;
 }
 
 /* Responsive */
